@@ -11,6 +11,8 @@ public class Constants {
 
 		
 		//ten bluetooth chat applications
-		public static String DATABASE = "jdbc:mysql://localhost/facer_test_repo_9_6_2018?useSSL=false&user=root";
+		//public static String DATABASE = "jdbc:mysql://localhost/facer_test_repo_9_6_2018?useSSL=false&user=root";
+		//public static String DATABASE = "jdbc:mysql://localhost/facer_test_repo_exp_1?useSSL=false&user=root";
+		public static String DATABASE = "jdbc:mysql://localhost/fold1?useSSL=false&user=root";
 
 }

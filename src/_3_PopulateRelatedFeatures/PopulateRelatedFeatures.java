@@ -19,15 +19,16 @@ public class PopulateRelatedFeatures {
 		//the output is clusterIDs that appear together across projects
 		
 		//read file line by line and add to an arraylist of strings
-		String fileName = "output.txt";
+		String fileName = "output_fold1.txt";
 		int minSup = 2;
+		int minDepth = 2;
 		ArrayList<String> relatedFeaturesList = getCoOccurringFeatures(fileName, minSup);
 		
 		//save the clusterIDs in a related_features table (id, feature_id, cluster_id)
 		//each itemset that has a min support of 2 a min depth of two should be stored 
 		DatabaseAccessLayer dbLayer = DatabaseAccessLayer.getInstance();
 		dbLayer.initializeConnectorToPopulateRelatedFeatures();				
-		dbLayer.populateRelatedFeaturesTable(relatedFeaturesList);
+		dbLayer.populateRelatedFeaturesTable(relatedFeaturesList, minDepth);
 		dbLayer.closeConnector();		
 	}
 

@@ -1,0 +1,38 @@
+package _4_RetrieveRelatedFeatures;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import DataObjects.Method;
+import db_access_layer.DatabaseAccessLayer;
+import _3_PopulateRelatedFeatures.ViewSampleMethodForClusters;;
+
+public class RetrieveRelatedFeatures {
+
+	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException
+	{	
+		DatabaseAccessLayer dbLayer = DatabaseAccessLayer.getInstance();
+		dbLayer.initializeConnectorToRetrieveRelatedFeatures();	
+		int clusterID = 224;
+		//1. retrieve all featureIDs against a selected clusterID
+		ArrayList<Integer> featureIDs = dbLayer.getFeatureIDs(clusterID);
+		//2. for each feature, get the member clusterIDs except for user selected clusterID
+		String[] clustersList;
+		ArrayList<Integer> clusterIDsList = new ArrayList<Integer>();
+		for(Integer fID: featureIDs)
+		{
+			clusterIDsList.addAll(dbLayer.getclusterIDs(clusterID, fID));
+		}
+		Integer[] array = new Integer[clusterIDsList.size()];
+		array = clusterIDsList.toArray(array);
+		//3. call the viewMethodsAgainstClusterIDs method to get related methods 
+		//(these clusters contain the top representative method for now)
+	
+		ViewSampleMethodForClusters.viewMethodsAgainstClusterIDs(array);
+		dbLayer.closeConnector();	
+		
+		
+	}
+	
+}
