@@ -14,5 +14,7 @@ public class Constants {
 		//public static String DATABASE = "jdbc:mysql://localhost/facer_test_repo_9_6_2018?useSSL=false&user=root";
 		//public static String DATABASE = "jdbc:mysql://localhost/facer_test_repo_exp_1?useSSL=false&user=root";
 		public static String DATABASE = "jdbc:mysql://localhost/fold1?useSSL=false&user=root";
+		
+		public static String HELDOUT_PROJECT_DATABASE = "jdbc:mysql://localhost/facer_test_repo_29_5_2018?useSSL=false&user=root";
 
 }

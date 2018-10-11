@@ -12,9 +12,20 @@ public class RetrieveRelatedFeatures {
 
 	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException
 	{	
+		
+		int clusterID = 224;
+		Integer[] array = retrieveRelatedClusterIDs(clusterID);
+	
+		ViewSampleMethodForClusters.viewMethodsAgainstClusterIDs(array);
+		
+		
+		
+	}
+
+	public static Integer[] retrieveRelatedClusterIDs(
+			int clusterID) throws SQLException, ClassNotFoundException {
 		DatabaseAccessLayer dbLayer = DatabaseAccessLayer.getInstance();
 		dbLayer.initializeConnectorToRetrieveRelatedFeatures();	
-		int clusterID = 224;
 		//1. retrieve all featureIDs against a selected clusterID
 		ArrayList<Integer> featureIDs = dbLayer.getFeatureIDs(clusterID);
 		//2. for each feature, get the member clusterIDs except for user selected clusterID
@@ -28,11 +39,8 @@ public class RetrieveRelatedFeatures {
 		array = clusterIDsList.toArray(array);
 		//3. call the viewMethodsAgainstClusterIDs method to get related methods 
 		//(these clusters contain the top representative method for now)
-	
-		ViewSampleMethodForClusters.viewMethodsAgainstClusterIDs(array);
 		dbLayer.closeConnector();	
-		
-		
+		return array;
 	}
 	
 }
