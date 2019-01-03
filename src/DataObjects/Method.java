@@ -7,6 +7,7 @@ public class Method {
 	public int to_line_num;
 	public String file_name;
 	public int projectID;
+	public int clusterID;
 
 		
 	public Method()

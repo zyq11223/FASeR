@@ -19,8 +19,8 @@ public class PopulateRelatedFeatures {
 		//the output is clusterIDs that appear together across projects
 		
 		//read file line by line and add to an arraylist of strings
-		String fileName = "output_fold1.txt";
-		int minSup = 2;
+		String fileName = "output_musicplayer_fpmax_all.txt";
+		int minSup = 3;
 		int minDepth = 2;
 		ArrayList<String> relatedFeaturesList = getCoOccurringFeatures(fileName, minSup);
 		

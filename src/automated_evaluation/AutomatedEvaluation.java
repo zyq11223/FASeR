@@ -16,6 +16,10 @@ import db_access_layer.EvaluationDAL;
  */
 public class AutomatedEvaluation {
 
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String args[]) throws Exception{
 				
 		//1.get distinct API usages from the API call table of the held out project
@@ -28,7 +32,7 @@ public class AutomatedEvaluation {
 		//2.get the distinct API names from from the related methods recommended.  
 		ArrayList<String> RecommendedAPIUsages = new ArrayList<String>();
 		dbLayer.initializeFoldDatabaseConnector();
-		Integer[] array = RetrieveRelatedFeatures.retrieveRelatedClusterIDs(224);
+		Integer[] array = RetrieveRelatedFeatures.retrieveRelatedClusterIDs(259);
 		
 		RecommendedAPIUsages = viewMethodsAgainstClusterIDs(array);	
 		

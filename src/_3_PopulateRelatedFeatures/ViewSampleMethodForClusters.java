@@ -84,15 +84,16 @@ public class ViewSampleMethodForClusters {
 			ArrayList<String> body = getMethodBody(m);
 			ArrayList<String> api_calls = dbLayer.getMethodAPICalls(m);
 			System.out.println("-----------------------------");
-			System.out.println("Project ID:" + m.projectID);
-			System.out.println("Method ID:" + m.id);
-			System.out.println("Method Name:" + m.name);
-			System.out.println("File Name:" + m.file_name);
+			//System.out.println("Project ID:" + m.projectID);
+			//System.out.println("Cluster ID:" + m.clusterID);
+			//System.out.println("Method ID:" + m.id);
+			//System.out.println("Method Name:" + m.name);
+			//System.out.println("File Name:" + m.file_name);
 			//System.out.println("Method Body:");
-			//for(String s: body)
-			//{
-			//	System.out.println(s);
-			//}
+			for(String s: body)
+			{
+				System.out.println(s);
+			}
 			System.out.println("Method API calls:");
 			for(String s: api_calls)
 			{

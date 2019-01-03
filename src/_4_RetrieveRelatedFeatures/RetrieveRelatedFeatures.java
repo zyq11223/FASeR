@@ -8,17 +8,18 @@ import DataObjects.Method;
 import db_access_layer.DatabaseAccessLayer;
 import _3_PopulateRelatedFeatures.ViewSampleMethodForClusters;;
 
+/**
+ * @author shamsa
+ * 
+ */
 public class RetrieveRelatedFeatures {
 
 	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException
-	{	
-		
-		int clusterID = 224;
-		Integer[] array = retrieveRelatedClusterIDs(clusterID);
-	
-		ViewSampleMethodForClusters.viewMethodsAgainstClusterIDs(array);
-		
-		
+	{		
+		System.out.println("Starting!");
+		int clusterID = 484;//443
+		Integer[] array = retrieveRelatedClusterIDs(clusterID);	
+		ViewSampleMethodForClusters.viewMethodsAgainstClusterIDs(array);	
 		
 	}
 
@@ -31,10 +32,12 @@ public class RetrieveRelatedFeatures {
 		//2. for each feature, get the member clusterIDs except for user selected clusterID
 		String[] clustersList;
 		ArrayList<Integer> clusterIDsList = new ArrayList<Integer>();
+		clusterIDsList.add(clusterID);//adding the input cluster first
 		for(Integer fID: featureIDs)
 		{
 			clusterIDsList.addAll(dbLayer.getclusterIDs(clusterID, fID));
 		}
+		
 		Integer[] array = new Integer[clusterIDsList.size()];
 		array = clusterIDsList.toArray(array);
 		//3. call the viewMethodsAgainstClusterIDs method to get related methods 

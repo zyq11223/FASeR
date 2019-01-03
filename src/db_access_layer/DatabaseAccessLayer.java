@@ -183,6 +183,8 @@ public class DatabaseAccessLayer {
 			m.to_line_num = resultSet.getInt(5);
 			m.file_name = resultSet.getString(6);
 			m.projectID = resultSet.getInt(7);
+			m.clusterID = clusterID;
+			
 			
 			
     	}		
