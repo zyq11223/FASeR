@@ -16,6 +16,7 @@ public class EvaluationDAL {
 
 	private PreparedStatement APIUsagesSelection;
 	private PreparedStatement MethodSelection;
+	private PreparedStatement MethodSelectionByProject;
 
 	public static EvaluationDAL getInstance() {
 		return EvaluationDAL.SINGLETON;
@@ -38,7 +39,9 @@ public class EvaluationDAL {
 				.getConnection(Utilities.Constants.DATABASE);
 		 this.MethodSelection = this.connector
 					.prepareStatement("SELECT cluster.clusterID, method.id, method.name,method.from_line_num, method.to_line_num, file.file_name, file.project_id FROM `cluster` inner join method on method.id = cluster.methodID inner join file on file.id=method.file_id where clusterID = ? ");
-	       
+		 this.MethodSelectionByProject = this.connector
+					.prepareStatement("SELECT cluster.clusterID, method.id, method.name,method.from_line_num, method.to_line_num, file.file_name, file.project_id FROM `cluster` inner join method on method.id = cluster.methodID inner join file on file.id=method.file_id where clusterID = ? and project_id = ?");
+	         
 		this.APIUsagesSelection = this.connector
 				.prepareStatement("select distinct * FROM (SELECT api_name, api_usage FROM api_call where host_method_id = ? and api_call.api_name NOT in ('Log','Intent','Toast')) a ");
 			this.connector.setAutoCommit(false);
@@ -77,6 +80,31 @@ public class EvaluationDAL {
 				m.to_line_num = resultSet.getInt(5);
 				m.file_name = resultSet.getString(6);
 				m.projectID = resultSet.getInt(7);
+				
+				
+	    	}		
+			//MethodSelection.close();
+			return m;
+		}
+	 
+	 public Method getMethodFromProject(Integer clusterID, int projectID) throws SQLException {
+			
+			Method m = new Method();
+			
+			MethodSelectionByProject.setInt(1,clusterID);
+			MethodSelectionByProject.setInt(2,projectID);
+			ResultSet resultSet = MethodSelectionByProject.executeQuery();
+			if(resultSet.first())
+	    	{ 	
+				
+				m.id = resultSet.getInt(2);			
+				m.name = resultSet.getString(3);
+				m.from_line_num = resultSet.getInt(4);
+				m.to_line_num = resultSet.getInt(5);
+				m.file_name = resultSet.getString(6);
+				m.projectID = resultSet.getInt(7);
+				m.clusterID = clusterID;
+				
 				
 				
 	    	}		

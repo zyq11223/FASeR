@@ -127,5 +127,50 @@ public class ViewSampleMethodForClusters {
 		return s; 
 		
 	}
+
+
+
+	public static void viewMethodsAgainstClusterIDs(Integer[] clustersList,
+			int projectID) throws ClassNotFoundException, SQLException, IOException 
+	{
+		DatabaseAccessLayer dbLayer = DatabaseAccessLayer.getInstance();
+		dbLayer.initializeConnectorToDisplayMethodBodies();	
+		
+		//get the first method  in each cluster along with projectID and fileName 
+		ArrayList<DataObjects.Method> methodsList = new ArrayList<DataObjects.Method>();
+		for(Integer clusterID: clustersList)
+		{
+			Method method = dbLayer.getMethodFromProject(clusterID, projectID);
+			if(method.id == 0)
+				method = dbLayer.getFirstMethod(clusterID);
+			methodsList.add(method);
+			
+		}
+		
+		//and display their bodies
+		//iterate over methodIDs and display each method body
+		for(DataObjects.Method m: methodsList)
+		{
+			ArrayList<String> body = getMethodBody(m);
+			ArrayList<String> api_calls = dbLayer.getMethodAPICalls(m);
+			System.out.println("-----------------------------");
+			//System.out.println("Project ID:" + m.projectID);
+			//System.out.println("Cluster ID:" + m.clusterID);
+			//System.out.println("Method ID:" + m.id);
+			//System.out.println("Method Name:" + m.name);
+			//System.out.println("File Name:" + m.file_name);
+			//System.out.println("Method Body:");
+			for(String s: body)
+			{
+				System.out.println(s);
+			}
+			System.out.println("Method API calls:");
+			for(String s: api_calls)
+			{
+				System.out.println(s);
+			}
+		}
+		dbLayer.closeConnector();
+	}
 	
 }

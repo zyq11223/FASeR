@@ -25,15 +25,18 @@ public class DatabaseAccessLayer {
 	private PreparedStatement ClusterIDSelection;
 	private PreparedStatement RelatedFeaturesInsertion;
 	private PreparedStatement MethodSelection;
+	private PreparedStatement MethodSelectionByProject;
 	private PreparedStatement APICallsSelection;
 	private PreparedStatement RelatedFeaturesSelection;
 	private PreparedStatement ClustersBelongingToFeaturesSelection;
+	private PreparedStatement ClusterIDAgainstMethod;
+	private PreparedStatement  SameFileMethodsSelection;
 
-
-		
-	 public static DatabaseAccessLayer getInstance() { 
+	
+	public static DatabaseAccessLayer getInstance() { 
 	        return DatabaseAccessLayer.SINGLETON;
 	} 
+	
     public void initializeConnector() throws Exception
     {
     	Class.forName("com.mysql.jdbc.Driver");
@@ -56,8 +59,7 @@ public class DatabaseAccessLayer {
 
         this.RelatedFeaturesInsertion = this.connector
 				.prepareStatement("INSERT INTO related_features VALUES (0,?,?)");
-        
-		this.connector.setAutoCommit(false);
+        this.connector.setAutoCommit(false);
     }
     
    
@@ -143,6 +145,9 @@ public class DatabaseAccessLayer {
 
         this.MethodSelection = this.connector
 				.prepareStatement("SELECT cluster.clusterID, method.id, method.name,method.from_line_num, method.to_line_num, file.file_name, file.project_id FROM `cluster` inner join method on method.id = cluster.methodID inner join file on file.id=method.file_id where clusterID = ? ");
+        this.MethodSelectionByProject = this.connector
+				.prepareStatement("SELECT cluster.clusterID, method.id, method.name,method.from_line_num, method.to_line_num, file.file_name, file.project_id FROM `cluster` inner join method on method.id = cluster.methodID inner join file on file.id=method.file_id where clusterID = ? and project_id = ?");
+        
         this.APICallsSelection = this.connector
 				.prepareStatement("SELECT api_name, api_usage FROM api_call where host_method_id = ?");
 		this.connector.setAutoCommit(false);
@@ -250,9 +255,15 @@ public class DatabaseAccessLayer {
 		Class.forName("com.mysql.jdbc.Driver");
         // Setup the connection with the DB
         this.connector = DriverManager.getConnection(Utilities.Constants.DATABASE);       
+       
+        this.SameFileMethodsSelection =  this.connector
+				.prepareStatement("select id from method where file_id IN (select file_id from method where method.id = ?)");
+		
 
         this.RelatedFeaturesSelection = this.connector
 				.prepareStatement("SELECT id, feature_id FROM related_features where cluster_id = ? ");
+        this.ClusterIDAgainstMethod = this.connector
+				.prepareStatement("SELECT clusterID FROM cluster where methodID = ? ");
         this.ClustersBelongingToFeaturesSelection = this.connector
 				.prepareStatement("SELECT id, feature_id, cluster_id FROM related_features where feature_id = ? and cluster_id != ?");
 		this.connector.setAutoCommit(false);
@@ -282,11 +293,65 @@ public class DatabaseAccessLayer {
 		while(resultSet.next())
     	{ 		
 			int cID = resultSet.getInt(3);
-			clusterIDsList.add(cID);
+			if(!clusterIDsList.contains(cID))
+				clusterIDsList.add(cID);
     	}		
 		
 		return clusterIDsList;
 	}
+	public Method getMethodFromProject(Integer clusterID, int projectID) throws SQLException {
+		
+		Method m = new Method();
+		
+		MethodSelectionByProject.setInt(1,clusterID);
+		MethodSelectionByProject.setInt(2,projectID);
+		ResultSet resultSet = MethodSelectionByProject.executeQuery();
+		if(resultSet.first())
+    	{ 	
+			
+			m.id = resultSet.getInt(2);			
+			m.name = resultSet.getString(3);
+			m.from_line_num = resultSet.getInt(4);
+			m.to_line_num = resultSet.getInt(5);
+			m.file_name = resultSet.getString(6);
+			m.projectID = resultSet.getInt(7);
+			m.clusterID = clusterID;
+			
+			
+			
+    	}		
+		//MethodSelection.close();
+		return m;
+	}
+
+	public int getClusterID(int mID) throws SQLException {
+		
+		int CID = -1;
+		this.ClusterIDAgainstMethod.setInt(1, mID);
+		ResultSet resultSet = ClusterIDAgainstMethod.executeQuery();
+		while(resultSet.next())
+    	{ 		
+			CID = resultSet.getInt(1);
+			
+    	}		
+		
+		return CID;
+	}
+
+	public ArrayList<Integer> getSameFileMethods(int methodID) throws SQLException {
+		
+		ArrayList<Integer> methodIDsList = new ArrayList<Integer>();		
+		this.SameFileMethodsSelection.setInt(1,methodID);
+		ResultSet resultSet = SameFileMethodsSelection.executeQuery();
+		while(resultSet.next())
+    	{ 		
+			int mID = resultSet.getInt(1);
+			methodIDsList.add(mID);
+    	}		
+		
+		return methodIDsList;
+	}
+	
 	
 	
 

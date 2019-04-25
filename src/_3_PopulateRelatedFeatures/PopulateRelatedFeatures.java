@@ -19,7 +19,11 @@ public class PopulateRelatedFeatures {
 		//the output is clusterIDs that appear together across projects
 		
 		//read file line by line and add to an arraylist of strings
-		String fileName = "output_musicplayer_fpmax_all.txt";
+		//String fileName = "output_combined_fpclose.txt";
+		//String fileName = "output_chat_fpclose_2.txt";
+		//String fileName = "output_56plus_fpmax_0point1.txt";
+		String fileName = "output_101repo_fpclose_point03.txt";
+		
 		int minSup = 3;
 		int minDepth = 2;
 		ArrayList<String> relatedFeaturesList = getCoOccurringFeatures(fileName, minSup);

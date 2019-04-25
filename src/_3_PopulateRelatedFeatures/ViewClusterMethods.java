@@ -14,7 +14,7 @@ public class ViewClusterMethods {
 	public static void main(String args[]) throws ClassNotFoundException, SQLException, IOException
 	{	//15 and 8 is a really great suggestion of related features
 		//input cluster ID
-		int clusterID =10;
+		int clusterID = 1;
 		//get the method IDs in this cluster along with projectID and fileName 
 		DatabaseAccessLayer dbLayer = DatabaseAccessLayer.getInstance();
 		dbLayer.initializeConnectorToDisplayMethodBodies();				
